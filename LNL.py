@@ -83,7 +83,7 @@ class Block(nn.Module):
         patch_embed = patch_embed + self.drop_path(x)
 
         cls_token, patch_embed = torch.split(patch_embed, [1, N - 1], dim=1)                 # (B, 1, dim), (B, 196, dim)
-        patch_embed = patch_embed.transpose(1, 2).view(B, C, Nsqrt, Nsqrt)   # (B, dim, 14, 14)
+        patch_embed = patch_embed.transpose(1, 2).contiguous().view(B, C, Nsqrt, Nsqrt)   # (B, dim, 14, 14)
         patch_embed = self.conv(patch_embed).flatten(2).transpose(1, 2)                                 # (B, 196, dim)
         patch_embed = torch.cat([cls_token, patch_embed], dim=1)
 
